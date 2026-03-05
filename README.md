@@ -1,36 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flowly
+
+> Calm task management for ADHD brains.
+
+**Live:** https://useflowly.vercel.app · **Repo:** https://github.com/Y2MC/flowly
+
+---
+
+## What is Flowly?
+
+Flowly is a full stack SaaS application that helps people with ADHD start tasks they've been avoiding. You type anything — a vague worry, a project, a chore — and the AI breaks it into steps so small and specific that not starting feels harder than just doing the first one.
+
+One step at a time. No lists. No overwhelm. Just the next thing.
+
+---
+
+## The Problem
+
+People with ADHD don't lack motivation — they lack the ability to start. The mental effort required to figure out what to do first, how to break it down, and where to begin is often bigger than the task itself. Standard to-do apps make this worse: they show a wall of tasks, create guilt, and offer no guidance on how to begin.
+
+Flowly solves the starting problem, not the organising problem.
+
+---
+
+## Features
+
+### Free Tier
+- AI task breakdown (up to 5 tasks/day)
+- One-step focus mode — see only the next action, nothing else
+- Basic task history
+
+### Pro Tier — NZD $8/month
+- Unlimited AI breakdowns
+- Crisis Mode — extreme simplification for your worst days
+- Daily brain dump → full structured day plan
+- Streak tracking with zero-shame resets
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 14 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Database | PostgreSQL (Supabase) |
+| ORM | Prisma |
+| Auth | NextAuth.js |
+| AI | OpenAI API (GPT-4o-mini) |
+| Payments | Stripe |
+| Deployment | Vercel |
+| CI/CD | GitHub Actions |
+
+---
+
+## Architecture
+
+```
+flowly/
+├── app/                  # Next.js App Router pages and API routes
+│   ├── api/              # REST API endpoints
+│   │   ├── auth/         # NextAuth handlers
+│   │   ├── tasks/        # Task CRUD
+│   │   ├── breakdown/    # OpenAI integration
+│   │   └── webhooks/     # Stripe webhooks
+│   ├── dashboard/        # Protected app pages
+│   └── (auth)/           # Login / signup pages
+├── components/           # Reusable React components
+├── lib/                  # Shared utilities (db, auth, stripe, openai)
+├── prisma/               # Database schema and migrations
+└── types/                # TypeScript type definitions
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js v18+
+- pnpm (`npm install -g pnpm`)
+- A Supabase account (free)
+- A Stripe account (free test mode)
+- An OpenAI API key
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Y2MC/flowly.git
+cd flowly
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` and fill in your values:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env.local
+```
 
-## Learn More
+```env
+# Database
+DATABASE_URL=
 
-To learn more about Next.js, take a look at the following resources:
+# Auth
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=http://localhost:3000
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# OpenAI
+OPENAI_API_KEY=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Stripe
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+```
 
-## Deploy on Vercel
+### Run locally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000)
+
+### Database setup
+
+```bash
+pnpm prisma migrate dev
+pnpm prisma generate
+```
+
+---
+
+## Development Workflow
+
+This project follows a professional engineering workflow:
+
+- All features are tracked as issues in Linear before any code is written
+- Every feature lives on its own branch: `feat/feature-name`
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org)
+- PRs are opened and self-reviewed before merging to main
+- GitHub Actions runs lint and tests on every PR
+- Vercel auto-deploys on every merge to main
+
+---
+
+## Roadmap
+
+- [x] Project scaffold + deployment pipeline
+- [ ] Supabase + Prisma database setup
+- [ ] User authentication (NextAuth.js)
+- [ ] Core task CRUD
+- [ ] OpenAI task breakdown
+- [ ] Stripe subscription + webhooks
+- [ ] Focus mode UI
+- [ ] GitHub Actions CI pipeline
+- [ ] Launch
+
+---
+
+## License
+
+MIT
