@@ -160,9 +160,3 @@ This project follows a professional engineering workflow:
 - [ ] Focus mode UI
 - [ ] GitHub Actions CI pipeline
 - [ ] Launch
-
----
-
-## License
-
-MIT
