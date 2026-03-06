@@ -25,11 +25,13 @@ Flowly solves the starting problem, not the organising problem.
 ## Features
 
 ### Free Tier
+
 - AI task breakdown (up to 5 tasks/day)
 - One-step focus mode — see only the next action, nothing else
 - Basic task history
 
 ### Pro Tier — NZD $8/month
+
 - Unlimited AI breakdowns
 - Crisis Mode — extreme simplification for your worst days
 - Daily brain dump → full structured day plan
@@ -39,18 +41,18 @@ Flowly solves the starting problem, not the organising problem.
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 14 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| Database | PostgreSQL (Supabase) |
-| ORM | Prisma |
-| Auth | NextAuth.js |
-| AI | OpenAI API (GPT-4o-mini) |
-| Payments | Stripe |
-| Deployment | Vercel |
-| CI/CD | GitHub Actions |
+| Layer      | Technology               |
+| ---------- | ------------------------ |
+| Framework  | Next.js 14 (App Router)  |
+| Language   | TypeScript               |
+| Styling    | Tailwind CSS             |
+| Database   | PostgreSQL (Supabase)    |
+| ORM        | Prisma                   |
+| Auth       | NextAuth.js              |
+| AI         | OpenAI API (GPT-4o-mini) |
+| Payments   | Stripe                   |
+| Deployment | Vercel                   |
+| CI/CD      | GitHub Actions           |
 
 ---
 
@@ -150,8 +152,8 @@ This project follows a professional engineering workflow:
 ## Roadmap
 
 - [x] Project scaffold + deployment pipeline
-- [ ] Supabase + Prisma database setup
-- [ ] User authentication (NextAuth.js)
+- [x] Supabase + Prisma database setup
+- [x] User authentication (NextAuth.js) — in progress
 - [ ] Core task CRUD
 - [ ] OpenAI task breakdown
 - [ ] Stripe subscription + webhooks
