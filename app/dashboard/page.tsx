@@ -4,11 +4,17 @@ import { useSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+interface Step {
+  content: string;
+  order: number;
+}
+
 interface Task {
   id: string;
   title: string;
   status: string;
   createdAt: string;
+  steps?: Step[];
 }
 
 export default function DashboardPage() {
@@ -17,6 +23,7 @@ export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
   const [loading, setLoading] = useState(true);
+  const [breakingDown, setBreakingDown] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -25,17 +32,23 @@ export default function DashboardPage() {
   }, [status, router]);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      fetchTasks();
-    }
-  }, [status]);
+    if (status !== "authenticated") return;
 
-  async function fetchTasks() {
-    const res = await fetch("/api/tasks");
-    const data = await res.json();
-    setTasks(data.tasks || []);
-    setLoading(false);
-  }
+    let cancelled = false;
+
+    fetch("/api/tasks")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) {
+          setTasks(data.tasks || []);
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [status]);
 
   async function addTask() {
     if (!newTask.trim()) return;
@@ -45,7 +58,7 @@ export default function DashboardPage() {
       body: JSON.stringify({ title: newTask }),
     });
     const data = await res.json();
-    setTasks([data.task, ...tasks]);
+    setTasks([{ ...data.task, steps: [] }, ...tasks]);
     setNewTask("");
   }
 
@@ -56,6 +69,30 @@ export default function DashboardPage() {
       body: JSON.stringify({ id }),
     });
     setTasks(tasks.filter((t) => t.id !== id));
+  }
+
+  async function breakDown(task: Task) {
+    setBreakingDown(task.id);
+    const res = await fetch("/api/breakdown", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ taskId: task.id, taskTitle: task.title }),
+    });
+    const data = await res.json();
+    setTasks(
+      tasks.map((t) =>
+        t.id === task.id
+          ? {
+              ...t,
+              steps: data.steps.map((content: string, order: number) => ({
+                content,
+                order,
+              })),
+            }
+          : t,
+      ),
+    );
+    setBreakingDown(null);
   }
 
   if (status === "loading" || loading) {
@@ -111,19 +148,52 @@ export default function DashboardPage() {
             No tasks yet. Add one above.
           </p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-4">
             {tasks.map((task) => (
               <li
                 key={task.id}
-                className="flex items-center justify-between bg-white px-5 py-4 rounded-xl border border-gray-100"
+                className="bg-white px-5 py-4 rounded-xl border border-gray-100"
               >
-                <span className="text-gray-900">{task.title}</span>
-                <button
-                  onClick={() => deleteTask(task.id)}
-                  className="text-gray-300 hover:text-red-400 transition-colors text-sm"
-                >
-                  Delete
-                </button>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-gray-900 font-medium">
+                    {task.title}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => breakDown(task)}
+                      disabled={breakingDown === task.id}
+                      className="text-sm text-blue-500 hover:text-blue-700 transition-colors disabled:opacity-50"
+                    >
+                      {breakingDown === task.id
+                        ? "Breaking down..."
+                        : "✨ Break it down"}
+                    </button>
+                    <button
+                      onClick={() => deleteTask(task.id)}
+                      className="text-gray-300 hover:text-red-400 transition-colors text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+
+                {task.steps && task.steps.length > 0 && (
+                  <ul className="mt-3 space-y-2">
+                    {task.steps
+                      .sort((a, b) => a.order - b.order)
+                      .map((step, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-3 text-sm text-gray-600"
+                        >
+                          <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-xs font-medium">
+                            {i + 1}
+                          </span>
+                          {step.content}
+                        </li>
+                      ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
