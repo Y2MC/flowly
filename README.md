@@ -151,13 +151,13 @@ This project follows a professional engineering workflow:
 
 ## Roadmap
 
-- [x] Project scaffold + deployment pipeline
-- [x] Supabase + Prisma database setup
-- [x] User authentication (Google OAuth + JWT sessions)
-- [x] Core task CRUD (add, view, delete tasks)
-- [ ] OpenAI AI task breakdown
-- [ ] Stripe subscription + webhooks
-- [ ] Landing page + UI polish
-- [ ] Focus mode (one step at a time)
-- [ ] GitHub Actions CI pipeline
-- [ ] Launch
+- [x] Phase 0 — Dev environment setup
+- [x] Phase 1 — Project scaffold, GitHub, Vercel deployment
+- [x] Phase 2 — PostgreSQL database with Prisma ORM (Supabase)
+- [x] Phase 3 — Google OAuth authentication (NextAuth.js)
+- [x] Phase 4 — Core task management (add, view, delete)
+- [x] Phase 5 — AI task breakdown via OpenAI GPT-4o-mini
+- [x] Phase 6 — Stripe subscription payments (free/pro tier)
+- [ ] Phase 7 — Landing page, focus mode, UI polish, mobile responsive
+- [ ] Phase 8 — Testing (Vitest) + CI/CD (GitHub Actions)
+- [ ] Phase 9 — Public launch
