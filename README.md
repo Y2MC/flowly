@@ -153,10 +153,11 @@ This project follows a professional engineering workflow:
 
 - [x] Project scaffold + deployment pipeline
 - [x] Supabase + Prisma database setup
-- [x] User authentication (NextAuth.js) — in progress
-- [ ] Core task CRUD
-- [ ] OpenAI task breakdown
+- [x] User authentication (Google OAuth + JWT sessions)
+- [x] Core task CRUD (add, view, delete tasks)
+- [ ] OpenAI AI task breakdown
 - [ ] Stripe subscription + webhooks
-- [ ] Focus mode UI
+- [ ] Landing page + UI polish
+- [ ] Focus mode (one step at a time)
 - [ ] GitHub Actions CI pipeline
 - [ ] Launch
