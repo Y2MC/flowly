@@ -8,6 +8,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const FREE_DAILY_LIMIT = 5;
+
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
 
@@ -22,6 +24,57 @@ export async function POST(request: Request) {
       { error: "taskId and taskTitle are required" },
       { status: 400 },
     );
+  }
+
+  // Get or create user
+  const user = await prisma.user.upsert({
+    where: { email: session.user.email },
+    update: {},
+    create: {
+      email: session.user.email,
+      name: session.user.name ?? null,
+      image: session.user.image ?? null,
+    },
+  });
+
+  // Check subscription status
+  const subscription = await prisma.subscription.findUnique({
+    where: { userId: user.id },
+  });
+
+  const isPro = subscription?.status === "active";
+
+  // If free user, check daily usage
+  if (!isPro) {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const todayStepCount = await prisma.step.count({
+      where: {
+        task: { userId: user.id },
+        createdAt: { gte: startOfDay },
+      },
+    });
+
+    // Each breakdown creates ~5 steps, so 5 breakdowns = ~25 steps
+    // We track by breakdown attempts instead
+    const todayBreakdowns = await prisma.task.count({
+      where: {
+        userId: user.id,
+        steps: {
+          some: {
+            createdAt: { gte: startOfDay },
+          },
+        },
+      },
+    });
+
+    if (todayBreakdowns >= FREE_DAILY_LIMIT) {
+      return NextResponse.json(
+        { error: "FREE_LIMIT_REACHED", limit: FREE_DAILY_LIMIT },
+        { status: 403 },
+      );
+    }
   }
 
   const completion = await openai.chat.completions.create({
@@ -56,22 +109,13 @@ Return ONLY a JSON array of strings. No explanation, no preamble. Example: ["Ope
     return NextResponse.json({ error: "Invalid AI response" }, { status: 500 });
   }
 
-  // Save steps to database
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
-
-  // Delete existing steps for this task first
+  // Delete existing steps for this task
   await prisma.step.deleteMany({
     where: { taskId },
   });
 
-  // Create new steps
-  const savedSteps = await prisma.step.createMany({
+  // Save new steps
+  await prisma.step.createMany({
     data: steps.map((content, index) => ({
       content,
       order: index,
@@ -79,5 +123,5 @@ Return ONLY a JSON array of strings. No explanation, no preamble. Example: ["Ope
     })),
   });
 
-  return NextResponse.json({ steps });
+  return NextResponse.json({ steps, isPro });
 }

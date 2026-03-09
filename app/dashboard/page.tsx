@@ -1,8 +1,8 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Step {
   content: string;
@@ -17,13 +17,17 @@ interface Task {
   steps?: Step[];
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
   const [loading, setLoading] = useState(true);
   const [breakingDown, setBreakingDown] = useState<string | null>(null);
+  const [limitReached, setLimitReached] = useState(false);
+  const [isPro, setIsPro] = useState(false);
+  const [upgraded, setUpgraded] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -49,6 +53,16 @@ export default function DashboardPage() {
       cancelled = true;
     };
   }, [status]);
+
+  useEffect(() => {
+    if (searchParams.get("upgraded") !== "true") return;
+    const t = setTimeout(() => {
+      setUpgraded(true);
+      setIsPro(true);
+      setLimitReached(false);
+    }, 0);
+    return () => clearTimeout(t);
+  }, [searchParams]);
 
   async function addTask() {
     if (!newTask.trim()) return;
@@ -78,7 +92,18 @@ export default function DashboardPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ taskId: task.id, taskTitle: task.title }),
     });
+
+    if (res.status === 403) {
+      const data = await res.json();
+      if (data.error === "FREE_LIMIT_REACHED") {
+        setLimitReached(true);
+      }
+      setBreakingDown(null);
+      return;
+    }
+
     const data = await res.json();
+    if (data.isPro) setIsPro(true);
     setTasks(
       tasks.map((t) =>
         t.id === task.id
@@ -95,6 +120,14 @@ export default function DashboardPage() {
     setBreakingDown(null);
   }
 
+  async function handleUpgrade() {
+    const res = await fetch("/api/stripe/checkout", { method: "POST" });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    }
+  }
+
   if (status === "loading" || loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-gray-50">
@@ -108,6 +141,11 @@ export default function DashboardPage() {
       <nav className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">Flowly</h1>
         <div className="flex items-center gap-4">
+          {isPro && (
+            <span className="text-xs font-medium bg-blue-50 text-blue-600 px-2 py-1 rounded-full">
+              Pro
+            </span>
+          )}
           <span className="text-sm text-gray-500">{session?.user?.name}</span>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
@@ -119,6 +157,29 @@ export default function DashboardPage() {
       </nav>
 
       <div className="max-w-2xl mx-auto px-6 py-12">
+        {upgraded && (
+          <div className="mb-6 px-4 py-3 bg-green-50 border border-green-100 rounded-xl text-green-700 text-sm">
+            You are now on Flowly Pro — unlimited breakdowns unlocked!
+          </div>
+        )}
+
+        {limitReached && !isPro && (
+          <div className="mb-6 px-4 py-4 bg-amber-50 border border-amber-100 rounded-xl">
+            <p className="text-amber-800 text-sm font-medium mb-3">
+              You have used your 5 free breakdowns for today.
+            </p>
+            <p className="text-amber-700 text-sm mb-4">
+              Upgrade to Flowly Pro for unlimited AI breakdowns — NZD $8/month.
+            </p>
+            <button
+              onClick={handleUpgrade}
+              className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Upgrade to Pro
+            </button>
+          </div>
+        )}
+
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           Hey {session?.user?.name?.split(" ")[0]} 👋
         </h2>
@@ -200,5 +261,19 @@ export default function DashboardPage() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+          <p className="text-gray-400">Loading...</p>
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }
