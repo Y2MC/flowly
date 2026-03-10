@@ -1,6 +1,11 @@
 # Flowly
 
-> Calm task management for ADHD brains.
+> Break anything down. Start anyway.
+
+[![Tests](https://github.com/Y2MC/flowly/actions/workflows/test.yml/badge.svg)](https://github.com/Y2MC/flowly/actions/workflows/test.yml)
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Deployed on Vercel](https://img.shields.io/badge/Deployed-Vercel-black)
 
 **Live:** https://useflowly.vercel.app · **Repo:** https://github.com/Y2MC/flowly
 
@@ -8,85 +13,99 @@
 
 ## What is Flowly?
 
-Flowly is a full stack SaaS application that helps people with ADHD start tasks they've been avoiding. You type anything — a vague worry, a project, a chore — and the AI breaks it into steps so small and specific that not starting feels harder than just doing the first one.
+Flowly is a SaaS task manager built specifically for people with ADHD. The core idea is simple — instead of showing you a list of things to do, it asks the AI to break each task into steps so small they feel impossible to say no to.
 
-One step at a time. No lists. No overwhelm. Just the next thing.
+I built this because most productivity apps assume you just need a place to write things down. ADHD doesn't work that way. The problem isn't remembering what to do — it's starting.
 
 ---
 
-## The Problem
+## How it works
 
-People with ADHD don't lack motivation — they lack the ability to start. The mental effort required to figure out what to do first, how to break it down, and where to begin is often bigger than the task itself. Standard to-do apps make this worse: they show a wall of tasks, create guilt, and offer no guidance on how to begin.
+1. Add any task — doesn't matter how vague
+2. Click "Break it down" — GPT-4o-mini generates 4-6 concrete micro-steps
+3. Click "Focus" — enter focus mode and see one step at a time
+4. Mark each step done and move to the next
 
-Flowly solves the starting problem, not the organising problem.
+Free users get 5 AI breakdowns per day. Pro users get unlimited.
 
 ---
 
 ## Features
 
-### Free Tier
+**Free**
 
-- AI task breakdown (up to 5 tasks/day)
-- One-step focus mode — see only the next action, nothing else
-- Basic task history
+- Unlimited tasks
+- 5 AI breakdowns per day
+- Focus mode
+- Google sign in
 
-### Pro Tier — NZD $8/month
+**Pro — NZD $8/month**
 
 - Unlimited AI breakdowns
-- Crisis Mode — extreme simplification for your worst days
-- Daily brain dump → full structured day plan
-- Streak tracking with zero-shame resets
+- Priority support
 
 ---
 
 ## Tech Stack
 
-| Layer      | Technology               |
-| ---------- | ------------------------ |
-| Framework  | Next.js 14 (App Router)  |
-| Language   | TypeScript               |
-| Styling    | Tailwind CSS             |
-| Database   | PostgreSQL (Supabase)    |
-| ORM        | Prisma                   |
-| Auth       | NextAuth.js              |
-| AI         | OpenAI API (GPT-4o-mini) |
-| Payments   | Stripe                   |
-| Deployment | Vercel                   |
-| CI/CD      | GitHub Actions           |
+| Layer     | Technology                        |
+| --------- | --------------------------------- |
+| Framework | Next.js 16 (App Router)           |
+| Language  | TypeScript                        |
+| Styling   | Tailwind CSS v4                   |
+| Database  | PostgreSQL via Supabase           |
+| ORM       | Prisma 5                          |
+| Auth      | NextAuth.js v4 (JWT sessions)     |
+| AI        | OpenAI API (GPT-4o-mini)          |
+| Payments  | Stripe (subscriptions + webhooks) |
+| Hosting   | Vercel                            |
+| Testing   | Vitest                            |
+| CI/CD     | GitHub Actions                    |
 
 ---
 
-## Architecture
+## Project Structure
 
 ```
 flowly/
-├── app/                  # Next.js App Router pages and API routes
-│   ├── api/              # REST API endpoints
-│   │   ├── auth/         # NextAuth handlers
-│   │   ├── tasks/        # Task CRUD
-│   │   ├── breakdown/    # OpenAI integration
-│   │   └── webhooks/     # Stripe webhooks
-│   ├── dashboard/        # Protected app pages
-│   └── (auth)/           # Login / signup pages
-├── components/           # Reusable React components
-├── lib/                  # Shared utilities (db, auth, stripe, openai)
-├── prisma/               # Database schema and migrations
-└── types/                # TypeScript type definitions
+├── app/
+│   ├── api/
+│   │   ├── auth/[...nextauth]/   # NextAuth Google OAuth handler
+│   │   ├── tasks/                # Task CRUD (GET, POST, DELETE)
+│   │   ├── breakdown/            # OpenAI task breakdown endpoint
+│   │   ├── steps/                # Step fetch + mark done (GET, PATCH)
+│   │   └── stripe/
+│   │       ├── checkout/         # Stripe checkout session creation
+│   │       └── webhook/          # Stripe webhook handler
+│   ├── dashboard/                # Main app dashboard (protected)
+│   ├── focus/                    # Focus mode — one step at a time
+│   ├── login/                    # Google sign in page
+│   ├── providers.tsx             # SessionProvider wrapper
+│   └── page.tsx                  # Landing page
+├── lib/
+│   └── prisma.ts                 # Prisma client singleton
+├── prisma/
+│   └── schema.prisma             # User, Task, Step, Subscription models
+├── __tests__/
+│   └── utils.test.ts             # Vitest unit tests
+└── .github/
+    └── workflows/
+        └── test.yml              # CI — runs tests on every push to main
 ```
 
 ---
 
-## Getting Started
+## Running locally
 
 ### Prerequisites
 
-- Node.js v18+
-- pnpm (`npm install -g pnpm`)
-- A Supabase account (free)
-- A Stripe account (free test mode)
-- An OpenAI API key
+- Node.js v22+
+- pnpm
+- Supabase project (free tier is fine)
+- Stripe account (test mode)
+- OpenAI API key
 
-### Installation
+### Setup
 
 ```bash
 git clone https://github.com/Y2MC/flowly.git
@@ -94,21 +113,19 @@ cd flowly
 pnpm install
 ```
 
-### Environment Variables
-
-Copy `.env.example` to `.env.local` and fill in your values:
-
-```bash
-cp .env.example .env.local
-```
+Copy `.env.example` to `.env` and fill in your values:
 
 ```env
 # Database
-DATABASE_URL=
+# Must use Supabase Session Pooler with pgbouncer params
+DATABASE_URL=postgresql://...?pgbouncer=true&connection_limit=1
 
 # Auth
 NEXTAUTH_SECRET=
+AUTH_SECRET=
 NEXTAUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
 # OpenAI
 OPENAI_API_KEY=
@@ -117,47 +134,39 @@ OPENAI_API_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_PRICE_ID=
 ```
 
-### Run locally
+Push the schema to your database:
+
+```bash
+npx prisma db push
+npx prisma generate
+```
+
+Start the dev server:
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
-
-### Database setup
+Run tests:
 
 ```bash
-pnpm prisma migrate dev
-pnpm prisma generate
+pnpm test
 ```
-
----
-
-## Development Workflow
-
-This project follows a professional engineering workflow:
-
-- All features are tracked as issues in Linear before any code is written
-- Every feature lives on its own branch: `feat/feature-name`
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org)
-- PRs are opened and self-reviewed before merging to main
-- GitHub Actions runs lint and tests on every PR
-- Vercel auto-deploys on every merge to main
 
 ---
 
 ## Roadmap
 
-- [x] Phase 0 — Dev environment setup
-- [x] Phase 1 — Project scaffold, GitHub, Vercel deployment
-- [x] Phase 2 — PostgreSQL database with Prisma ORM (Supabase)
-- [x] Phase 3 — Google OAuth authentication (NextAuth.js)
-- [x] Phase 4 — Core task management (add, view, delete)
-- [x] Phase 5 — AI task breakdown via OpenAI GPT-4o-mini
-- [x] Phase 6 — Stripe subscription payments (free/pro tier)
-- [x] Phase 7 — Landing page, focus mode, steps API, mobile responsive
-- [x] Phase 8 — Vitest Testing + GitHub Actions CI/CD
-- [ ] Phase 9 — Public launch
+- [x] Phase 0 — Dev environment
+- [x] Phase 1 — Project scaffold + Vercel deployment
+- [x] Phase 2 — PostgreSQL + Prisma + Supabase
+- [x] Phase 3 — Google OAuth (NextAuth.js)
+- [x] Phase 4 — Task management (add, view, delete)
+- [x] Phase 5 — AI task breakdown (OpenAI GPT-4o-mini)
+- [x] Phase 6 — Stripe subscriptions (free tier + Pro)
+- [x] Phase 7 — Landing page, focus mode, mobile responsive
+- [x] Phase 8 — Vitest + GitHub Actions CI/CD
+- [ ] Phase 9 — Crisis mode, daily brain dump, UI polish, public launch
