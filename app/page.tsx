@@ -48,9 +48,9 @@ export default function Home() {
           >
             The task manager
             <br />
-            <span className="text-[#E8E3D9]/25">that knows</span>
+            <span className="text-[#E8E3D9]/25">that helps</span>
             <br />
-            you won&apos;t start.
+            you start.
           </h1>
 
           <div className="flex items-start gap-16 mt-14">
@@ -100,7 +100,7 @@ export default function Home() {
                 01
               </p>
               <h3 className="text-sm font-normal mb-3 text-[#E8E3D9]/80">
-                Add the thing you are avoiding
+                Add the tasks you have been avoiding
               </h3>
               <p
                 style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
@@ -120,8 +120,8 @@ export default function Home() {
                 style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
                 className="text-xs text-[#E8E3D9]/30 leading-relaxed"
               >
-                Not vague advice. Exact physical actions that take under 2
-                minutes each.
+                Not vague advice. Just exact physical actions that take under 2
+                minutes.
               </p>
             </div>
             <div className="bg-[#0D0D0D] p-10 pr-12">
@@ -129,14 +129,13 @@ export default function Home() {
                 03
               </p>
               <h3 className="text-sm font-normal mb-3 text-[#E8E3D9]/80">
-                Do the first step only
+                Just take the first step
               </h3>
               <p
                 style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
                 className="text-xs text-[#E8E3D9]/30 leading-relaxed"
               >
-                You will probably do the rest. But you only have to commit to
-                one.
+                Focus on one step at a time. The rest will follow naturally.
               </p>
             </div>
           </div>
