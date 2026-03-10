@@ -158,6 +158,6 @@ This project follows a professional engineering workflow:
 - [x] Phase 4 — Core task management (add, view, delete)
 - [x] Phase 5 — AI task breakdown via OpenAI GPT-4o-mini
 - [x] Phase 6 — Stripe subscription payments (free/pro tier)
-- [ ] Phase 7 — Landing page, focus mode, UI polish, mobile responsive
+- [x] Phase 7 — Landing page, focus mode, steps API, mobile responsive
 - [ ] Phase 8 — Testing (Vitest) + CI/CD (GitHub Actions)
 - [ ] Phase 9 — Public launch
