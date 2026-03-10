@@ -220,6 +220,18 @@ function DashboardContent() {
                     {task.title}
                   </span>
                   <div className="flex items-center gap-3">
+                    {task.steps && task.steps.length > 0 && (
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/focus?taskId=${task.id}&title=${encodeURIComponent(task.title)}`,
+                          )
+                        }
+                        className="text-sm text-emerald-500 hover:text-emerald-700 transition-colors"
+                      >
+                        Focus →
+                      </button>
+                    )}
                     <button
                       onClick={() => breakDown(task)}
                       disabled={breakingDown === task.id}
