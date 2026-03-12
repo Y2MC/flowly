@@ -133,10 +133,10 @@ function DashboardContent() {
 
   if (status === "loading" || loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#0D0D0D]">
+      <main className="flex min-h-screen items-center justify-center bg-[#1A1A1A]">
         <p
           style={{ fontFamily: sans }}
-          className="text-[#E8E3D9]/30 text-xs tracking-widest uppercase"
+          className="text-[#EDE8DF]/40 text-xs tracking-widest uppercase"
         >
           Loading...
         </p>
@@ -145,12 +145,12 @@ function DashboardContent() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0D0D0D] text-[#E8E3D9]">
+    <main className="min-h-screen bg-[#1A1A1A] text-[#EDE8DF]">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-8 py-6 border-b border-[#E8E3D9]/8">
+      <nav className="flex items-center justify-between px-8 py-6 border-b border-[#EDE8DF]/10">
         <span
           style={{ fontFamily: serif }}
-          className="text-base tracking-[0.2em] uppercase text-[#E8E3D9]/80"
+          className="text-base tracking-[0.2em] uppercase text-[#EDE8DF]"
         >
           Flowly
         </span>
@@ -158,21 +158,21 @@ function DashboardContent() {
           {isPro && (
             <span
               style={{ fontFamily: sans }}
-              className="text-[9px] tracking-widest uppercase text-[#A8E6A3] border border-[#A8E6A3]/20 px-2 py-1"
+              className="text-[9px] tracking-widest uppercase text-[#A8E6A3] border border-[#A8E6A3]/30 px-2 py-1"
             >
               Pro
             </span>
           )}
           <span
             style={{ fontFamily: sans }}
-            className="text-xs text-[#E8E3D9]/30"
+            className="text-xs text-[#EDE8DF]/50"
           >
             {session?.user?.name}
           </span>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
             style={{ fontFamily: sans }}
-            className="text-[10px] tracking-widest uppercase text-[#E8E3D9]/25 hover:text-[#E8E3D9] transition-colors duration-200"
+            className="text-[10px] tracking-widest uppercase text-[#EDE8DF]/40 hover:text-[#EDE8DF] transition-colors duration-200"
           >
             Sign out
           </button>
@@ -184,7 +184,7 @@ function DashboardContent() {
         {upgraded && (
           <div
             style={{ fontFamily: sans }}
-            className="mb-8 px-4 py-3 border border-[#A8E6A3]/20 bg-[#A8E6A3]/5 text-[#A8E6A3] text-xs tracking-wide"
+            className="mb-8 px-4 py-3 border border-[#A8E6A3]/25 bg-[#A8E6A3]/8 text-[#A8E6A3] text-xs tracking-wide"
           >
             You are now on Flowly Pro — unlimited breakdowns unlocked.
           </div>
@@ -192,23 +192,23 @@ function DashboardContent() {
 
         {/* Limit reached banner */}
         {limitReached && !isPro && (
-          <div className="mb-8 px-5 py-5 border border-[#E8E3D9]/10 bg-[#141414]">
+          <div className="mb-8 px-5 py-5 border border-[#EDE8DF]/12 bg-[#222222]">
             <p
               style={{ fontFamily: serif }}
-              className="text-sm text-[#E8E3D9]/70 mb-2"
+              className="text-sm text-[#EDE8DF]/80 mb-2"
             >
               You have used your 5 free breakdowns for today.
             </p>
             <p
               style={{ fontFamily: sans }}
-              className="text-xs text-[#E8E3D9]/30 mb-5"
+              className="text-xs text-[#EDE8DF]/50 mb-5"
             >
               Upgrade to Pro for unlimited AI breakdowns — NZD $8/month.
             </p>
             <button
               onClick={handleUpgrade}
               style={{ fontFamily: sans }}
-              className="px-5 py-2.5 bg-[#E8E3D9] text-[#0D0D0D] text-xs tracking-widest uppercase font-medium hover:bg-[#E8E3D9]/90 transition-colors duration-200"
+              className="px-5 py-2.5 bg-[#EDE8DF] text-[#1A1A1A] text-xs tracking-widest uppercase font-medium hover:bg-[#EDE8DF]/90 transition-colors duration-200"
             >
               Upgrade to Pro
             </button>
@@ -218,13 +218,13 @@ function DashboardContent() {
         {/* Greeting */}
         <h2
           style={{ fontFamily: serif }}
-          className="text-3xl font-normal tracking-tight text-[#E8E3D9] mb-1"
+          className="text-3xl font-normal tracking-tight text-[#EDE8DF] mb-1"
         >
           {session?.user?.name?.split(" ")[0]}
         </h2>
         <p
           style={{ fontFamily: sans }}
-          className="text-xs text-[#E8E3D9]/30 tracking-wide mb-10"
+          className="text-xs text-[#EDE8DF]/50 tracking-wide mb-10"
         >
           What do you need to get done today?
         </p>
@@ -238,12 +238,12 @@ function DashboardContent() {
             onKeyDown={(e) => e.key === "Enter" && addTask()}
             placeholder="Add a task..."
             style={{ fontFamily: sans }}
-            className="flex-1 px-4 py-3 bg-[#141414] border border-[#E8E3D9]/10 text-[#E8E3D9] text-sm placeholder-[#E8E3D9]/20 focus:outline-none focus:border-[#E8E3D9]/30 transition-colors duration-200"
+            className="flex-1 px-4 py-3 bg-[#222222] border border-[#EDE8DF]/12 text-[#EDE8DF] text-sm placeholder-[#EDE8DF]/30 focus:outline-none focus:border-[#EDE8DF]/35 transition-colors duration-200"
           />
           <button
             onClick={addTask}
             style={{ fontFamily: sans }}
-            className="px-6 py-3 bg-[#E8E3D9] text-[#0D0D0D] text-xs tracking-widest uppercase font-medium hover:bg-[#E8E3D9]/90 transition-colors duration-200"
+            className="px-6 py-3 bg-[#EDE8DF] text-[#1A1A1A] text-xs tracking-widest uppercase font-medium hover:bg-[#EDE8DF]/90 transition-colors duration-200"
           >
             Add
           </button>
@@ -253,7 +253,7 @@ function DashboardContent() {
         {tasks.length === 0 ? (
           <p
             style={{ fontFamily: sans }}
-            className="text-center text-[#E8E3D9]/15 text-xs tracking-widest uppercase py-16"
+            className="text-center text-[#EDE8DF]/30 text-xs tracking-widest uppercase py-16"
           >
             No tasks yet.
           </p>
@@ -262,12 +262,12 @@ function DashboardContent() {
             {tasks.map((task) => (
               <li
                 key={task.id}
-                className="bg-[#141414] border border-[#E8E3D9]/8 px-5 py-4"
+                className="bg-[#222222] border border-[#EDE8DF]/10 px-5 py-4"
               >
                 <div className="flex items-center justify-between">
                   <span
                     style={{ fontFamily: serif }}
-                    className="text-sm text-[#E8E3D9]/80 font-normal"
+                    className="text-sm text-[#EDE8DF]/90 font-normal"
                   >
                     {task.title}
                   </span>
@@ -289,14 +289,14 @@ function DashboardContent() {
                       onClick={() => breakDown(task)}
                       disabled={breakingDown === task.id}
                       style={{ fontFamily: sans }}
-                      className="text-[10px] tracking-widest uppercase text-[#E8E3D9]/35 hover:text-[#E8E3D9] transition-colors duration-200 disabled:opacity-30"
+                      className="text-[10px] tracking-widest uppercase text-[#EDE8DF]/50 hover:text-[#EDE8DF] transition-colors duration-200 disabled:opacity-30"
                     >
                       {breakingDown === task.id ? "Thinking..." : "Break down"}
                     </button>
                     <button
                       onClick={() => deleteTask(task.id)}
                       style={{ fontFamily: sans }}
-                      className="text-[10px] tracking-widest uppercase text-[#E8E3D9]/15 hover:text-red-400 transition-colors duration-200"
+                      className="text-[10px] tracking-widests uppercase text-[#EDE8DF]/30 hover:text-red-400 transition-colors duration-200"
                     >
                       Delete
                     </button>
@@ -304,20 +304,20 @@ function DashboardContent() {
                 </div>
 
                 {task.steps && task.steps.length > 0 && (
-                  <ul className="mt-4 space-y-2 border-t border-[#E8E3D9]/5 pt-4">
+                  <ul className="mt-4 space-y-2 border-t border-[#EDE8DF]/8 pt-4">
                     {task.steps
                       .sort((a, b) => a.order - b.order)
                       .map((step, i) => (
                         <li key={i} className="flex items-start gap-3">
                           <span
                             style={{ fontFamily: sans }}
-                            className="text-[10px] text-[#E8E3D9]/20 mt-0.5 w-4 shrink-0"
+                            className="text-[10px] text-[#EDE8DF]/35 mt-0.5 w-4 shrink-0"
                           >
                             {i + 1}
                           </span>
                           <span
                             style={{ fontFamily: sans }}
-                            className="text-xs text-[#E8E3D9]/45 leading-relaxed"
+                            className="text-xs text-[#EDE8DF]/65 leading-relaxed"
                           >
                             {step.content}
                           </span>
@@ -338,10 +338,10 @@ export default function DashboardPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-[#0D0D0D]">
+        <div className="flex min-h-screen items-center justify-center bg-[#1A1A1A]">
           <p
             style={{ fontFamily: "'Helvetica Neue', Arial, sans-serif" }}
-            className="text-[#E8E3D9]/30 text-xs tracking-widest uppercase"
+            className="text-[#EDE8DF]/40 text-xs tracking-widest uppercase"
           >
             Loading...
           </p>

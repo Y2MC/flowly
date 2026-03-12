@@ -37,7 +37,6 @@ function FocusContent() {
           (a: Step, b: Step) => a.order - b.order,
         );
         setSteps(sorted);
-        // Find first incomplete step
         const firstIncomplete = sorted.findIndex((s: Step) => !s.done);
         setCurrentIndex(firstIncomplete === -1 ? 0 : firstIncomplete);
         setLoading(false);
@@ -66,9 +65,9 @@ function FocusContent() {
 
   if (loading || status === "loading") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#0D0D0D]">
+      <main className="flex min-h-screen items-center justify-center bg-[#1A1A1A]">
         <p
-          className="text-[#E8E3D9]/30 text-sm tracking-widest uppercase"
+          className="text-[#EDE8DF]/40 text-sm tracking-widest uppercase"
           style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
         >
           Loading...
@@ -79,17 +78,17 @@ function FocusContent() {
 
   if (steps.length === 0) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#0D0D0D]">
+      <main className="flex min-h-screen items-center justify-center bg-[#1A1A1A]">
         <div className="text-center">
           <p
-            className="text-[#E8E3D9]/30 text-sm mb-6"
+            className="text-[#EDE8DF]/50 text-sm mb-6"
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
           >
             No steps yet for this task.
           </p>
           <button
             onClick={() => router.push("/dashboard")}
-            className="text-xs tracking-widest uppercase text-[#E8E3D9]/40 hover:text-[#E8E3D9] transition-colors"
+            className="text-xs tracking-widests uppercase text-[#EDE8DF]/50 hover:text-[#EDE8DF] transition-colors"
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
           >
             ← Back to dashboard
@@ -101,24 +100,24 @@ function FocusContent() {
 
   if (allDone) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#0D0D0D]">
+      <main className="flex min-h-screen items-center justify-center bg-[#1A1A1A]">
         <div className="text-center max-w-sm px-8">
           <p className="text-5xl mb-8">✓</p>
           <h2
-            className="text-2xl font-normal text-[#E8E3D9] mb-4 tracking-tight"
+            className="text-2xl font-normal text-[#EDE8DF] mb-4 tracking-tight"
             style={{ fontFamily: "'Georgia', serif" }}
           >
             Task complete.
           </h2>
           <p
-            className="text-sm text-[#E8E3D9]/30 mb-10"
+            className="text-sm text-[#EDE8DF]/55 mb-10"
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
           >
             You did the thing.
           </p>
           <button
             onClick={() => router.push("/dashboard")}
-            className="text-xs tracking-widest uppercase text-[#E8E3D9]/40 hover:text-[#E8E3D9] transition-colors"
+            className="text-xs tracking-widest uppercase text-[#EDE8DF]/55 hover:text-[#EDE8DF] transition-colors"
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
           >
             ← Back to dashboard
@@ -133,18 +132,18 @@ function FocusContent() {
   const total = steps.length;
 
   return (
-    <main className="min-h-screen bg-[#0D0D0D] text-[#E8E3D9] flex flex-col">
+    <main className="min-h-screen bg-[#1A1A1A] text-[#EDE8DF] flex flex-col">
       {/* Top bar */}
       <div className="flex items-center justify-between px-8 py-6">
         <button
           onClick={() => router.push("/dashboard")}
-          className="text-xs tracking-widest uppercase text-[#E8E3D9]/25 hover:text-[#E8E3D9] transition-colors"
+          className="text-xs tracking-widest uppercase text-[#EDE8DF]/45 hover:text-[#EDE8DF] transition-colors"
           style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
         >
           ← Back
         </button>
         <span
-          className="text-xs tracking-widest uppercase text-[#E8E3D9]/25"
+          className="text-xs tracking-widest uppercase text-[#EDE8DF]/45"
           style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
         >
           {progress} / {total}
@@ -152,7 +151,7 @@ function FocusContent() {
       </div>
 
       {/* Progress bar */}
-      <div className="h-px bg-[#E8E3D9]/8 mx-8">
+      <div className="h-px bg-[#EDE8DF]/10 mx-8">
         <div
           className="h-px bg-[#A8E6A3] transition-all duration-500"
           style={{ width: `${(progress / total) * 100}%` }}
@@ -162,21 +161,21 @@ function FocusContent() {
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center justify-center px-8 py-16 max-w-xl mx-auto w-full">
         <p
-          className="text-xs tracking-[0.3em] uppercase text-[#E8E3D9]/20 mb-6 text-center"
+          className="text-xs tracking-[0.3em] uppercase text-[#EDE8DF]/50 mb-6 text-center"
           style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
         >
           {taskTitle}
         </p>
 
         <p
-          className="text-[10px] tracking-widest uppercase text-[#E8E3D9]/15 mb-12 text-center"
+          className="text-[10px] tracking-widest uppercase text-[#EDE8DF]/35 mb-12 text-center"
           style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
         >
           Step {currentIndex + 1} of {total}
         </p>
 
         <h2
-          className="text-3xl font-normal text-center leading-snug tracking-tight mb-16"
+          className="text-3xl font-normal text-center leading-snug tracking-tight mb-16 text-[#EDE8DF]"
           style={{ fontFamily: "'Georgia', serif" }}
         >
           {currentStep.content}
@@ -184,7 +183,7 @@ function FocusContent() {
 
         <button
           onClick={() => markDone(currentStep.id)}
-          className="px-10 py-4 bg-[#E8E3D9] text-[#0D0D0D] text-xs tracking-widest uppercase font-medium hover:bg-[#E8E3D9]/90 transition-colors duration-200"
+          className="px-10 py-4 bg-[#EDE8DF] text-[#1A1A1A] text-xs tracking-widest uppercase font-medium hover:bg-[#EDE8DF]/90 transition-colors duration-200"
           style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
         >
           Done — next step
@@ -200,9 +199,9 @@ function FocusContent() {
                 backgroundColor: step.done
                   ? "#A8E6A3"
                   : i === currentIndex
-                    ? "#E8E3D9"
-                    : "#E8E3D9",
-                opacity: step.done ? 1 : i === currentIndex ? 1 : 0.15,
+                    ? "#EDE8DF"
+                    : "#EDE8DF",
+                opacity: step.done ? 1 : i === currentIndex ? 1 : 0.2,
               }}
             />
           ))}
@@ -216,9 +215,9 @@ export default function FocusPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-[#0D0D0D]">
+        <main className="flex min-h-screen items-center justify-center bg-[#1A1A1A]">
           <p
-            className="text-[#E8E3D9]/30 text-sm tracking-widest uppercase"
+            className="text-[#EDE8DF]/40 text-sm tracking-widest uppercase"
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}
           >
             Loading...

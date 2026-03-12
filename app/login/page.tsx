@@ -7,25 +7,25 @@ const sans = "'Helvetica Neue', Arial, sans-serif";
 
 export default function LoginPage() {
   return (
-    <main className="min-h-screen bg-[#0D0D0D] text-[#E8E3D9] flex flex-col items-center justify-center px-8">
+    <main className="min-h-screen bg-[#1A1A1A] text-[#EDE8DF] flex flex-col items-center justify-center px-8">
       <div className="w-full max-w-sm text-center">
         <span
           style={{ fontFamily: serif }}
-          className="text-base tracking-[0.2em] uppercase text-[#E8E3D9]/80 block mb-16"
+          className="text-base tracking-[0.2em] uppercase text-[#EDE8DF] block mb-16"
         >
           Flowly
         </span>
 
         <h1
           style={{ fontFamily: serif }}
-          className="text-4xl font-normal tracking-tight text-[#E8E3D9] mb-3"
+          className="text-4xl font-normal tracking-tight text-[#EDE8DF] mb-3"
         >
           Start somewhere.
         </h1>
 
         <p
           style={{ fontFamily: sans }}
-          className="text-xs text-[#E8E3D9]/30 tracking-wide mb-12"
+          className="text-xs text-[#EDE8DF]/60 tracking-wide mb-12"
         >
           Sign in to break down your tasks.
         </p>
@@ -33,7 +33,7 @@ export default function LoginPage() {
         <button
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           style={{ fontFamily: sans }}
-          className="w-full flex items-center justify-center gap-3 px-6 py-3.5 border border-[#E8E3D9]/10 bg-[#141414] text-[#E8E3D9]/60 text-xs tracking-widest uppercase hover:border-[#E8E3D9]/25 hover:text-[#E8E3D9] transition-all duration-200"
+          className="w-full flex items-center justify-center gap-3 px-6 py-3.5 border border-[#EDE8DF]/15 bg-[#222222] text-[#EDE8DF]/70 text-xs tracking-widest uppercase hover:border-[#EDE8DF]/35 hover:text-[#EDE8DF] transition-all duration-200"
         >
           <svg width="16" height="16" viewBox="0 0 24 24">
             <path
@@ -58,7 +58,7 @@ export default function LoginPage() {
 
         <p
           style={{ fontFamily: sans }}
-          className="text-[10px] text-[#E8E3D9]/15 tracking-wide mt-8"
+          className="text-[10px] text-[#EDE8DF]/40 tracking-wide mt-8"
         >
           Free to start. No credit card required.
         </p>
