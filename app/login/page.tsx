@@ -2,19 +2,40 @@
 
 import { signIn } from "next-auth/react";
 
+const serif = "'Georgia', 'Times New Roman', serif";
+const sans = "'Helvetica Neue', Arial, sans-serif";
+
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-sm text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Flowly</h1>
-        <p className="text-gray-500 mb-8">
-          Calm task management for ADHD brains.
+    <main className="min-h-screen bg-[#0D0D0D] text-[#E8E3D9] flex flex-col items-center justify-center px-8">
+      <div className="w-full max-w-sm text-center">
+        <span
+          style={{ fontFamily: serif }}
+          className="text-base tracking-[0.2em] uppercase text-[#E8E3D9]/80 block mb-16"
+        >
+          Flowly
+        </span>
+
+        <h1
+          style={{ fontFamily: serif }}
+          className="text-4xl font-normal tracking-tight text-[#E8E3D9] mb-3"
+        >
+          Start somewhere.
+        </h1>
+
+        <p
+          style={{ fontFamily: sans }}
+          className="text-xs text-[#E8E3D9]/30 tracking-wide mb-12"
+        >
+          Sign in to break down your tasks.
         </p>
+
         <button
           onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-          className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors shadow-sm"
+          style={{ fontFamily: sans }}
+          className="w-full flex items-center justify-center gap-3 px-6 py-3.5 border border-[#E8E3D9]/10 bg-[#141414] text-[#E8E3D9]/60 text-xs tracking-widest uppercase hover:border-[#E8E3D9]/25 hover:text-[#E8E3D9] transition-all duration-200"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24">
+          <svg width="16" height="16" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -34,6 +55,13 @@ export default function LoginPage() {
           </svg>
           Continue with Google
         </button>
+
+        <p
+          style={{ fontFamily: sans }}
+          className="text-[10px] text-[#E8E3D9]/15 tracking-wide mt-8"
+        >
+          Free to start. No credit card required.
+        </p>
       </div>
     </main>
   );
